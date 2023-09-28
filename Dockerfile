@@ -1,7 +1,12 @@
-# Based on kylemanna/docker-openvpn
+# Uses scripts from kylemanna/docker-openvpn
+
+# Update this to point to the current version of openvpn (must be in the Tunnelblick repo)
+ARG openvpn_version=openvpn-2.6.6
 
 # Smallest base image, using alpine with glibc
 FROM frolvlad/alpine-glibc:latest as build
+
+ARG openvpn_version
 
 RUN apk update && \
 	apk add --update \
@@ -13,9 +18,19 @@ RUN apk update && \
 	  openssl-dev 
 
 # OpenVPN with XOR patches from Tunnelblick
-COPY ./tunnelblick/third_party/sources/openvpn/openvpn-2.6.6/openvpn-2.6.6 /usr/src/openvpn-2.6.6
+COPY ./Tunnelblick/third_party/sources/openvpn/$openvpn_version/ /usr/src
 
-RUN cd /usr/src/openvpn-2.6.6 && \
+RUN cd /usr/src \
+  && tar xf $openvpn_version.tar.gz  \
+  && cd /usr/src/$openvpn_version \
+  && patch -p1 < ../patches/02-tunnelblick-openvpn_xorpatch-a.diff \
+  && patch -p1 < ../patches/03-tunnelblick-openvpn_xorpatch-b.diff \
+  && patch -p1 < ../patches/04-tunnelblick-openvpn_xorpatch-c.diff \
+  && patch -p1 < ../patches/05-tunnelblick-openvpn_xorpatch-d.diff \
+  && patch -p1 < ../patches/06-tunnelblick-openvpn_xorpatch-e.diff \
+  && patch -p1 < ../patches/10-route-gateway-dhcp.diff
+
+RUN cd /usr/src/$openvpn_version && \
 	./configure \ 
 	  --disable-lzo \
 	  --disable-lz4 \
@@ -28,6 +43,8 @@ RUN cd /usr/src/openvpn-2.6.6 && \
 
 # Final image
 FROM frolvlad/alpine-glibc:latest
+ARG openvpn_version
+
 RUN apk update && \
 	apk upgrade --no-cache && \
     apk add --no-cache \
@@ -39,7 +56,7 @@ RUN apk update && \
 	  openssl && \
 	ln -s /usr/share/easy-rsa/easyrsa /usr/local/bin 
 
-COPY --from=build /usr/src/openvpn-2.6.6/src/openvpn/openvpn /usr/local/bin
+COPY --from=build /usr/src/$openvpn_version/src/openvpn/openvpn /usr/local/bin
 
 # Needed by scripts
 ENV OPENVPN=/etc/openvpn
