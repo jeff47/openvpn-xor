@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  openvpnd:
+    image: ghcr.io/jeff47/openvpn-xor
+    container_name: openvpnd
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - docker.env
+    ports:
+      - 8080:1194/udp
+    restart: unless-stopped
+    volumes:
+      - ./openvpn-server/conf:/etc/openvpn
+    healthcheck:
+      test: ["CMD", "pgrep", "openvpn"]
