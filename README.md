@@ -1,6 +1,6 @@
 # OpenVPN for Docker with XOR Obfuscation
 This is a standard OpenVPN server in a Docker container complete with an EasyRSA PKI CA, based on [Kyle Manna's image](https://github.com/kylemanna/docker-openvpn), but
-with the XOR obfuscation patches developed by Tunnelblick.
+with the [XOR obfuscation patches](https://www.tunnelblick.net/cOpenvpn_xorpatch.html) developed by Tunnelblick.
 
 ## Quick Start
 1. Create a directory to hold your configuration files and keys.
@@ -26,6 +26,11 @@ with the XOR obfuscation patches developed by Tunnelblick.
       
 6. Retrieve the client configuration with embedded certificates
 
-       ```
-       % docker compose run --rm openvpnd ovpn_getclient CLIENTNAME > CLIENTNAME.ovpn
-       ```
+      ```
+      % docker compose run --rm openvpnd ovpn_getclient CLIENTNAME > CLIENTNAME.ovpn
+      ```
+7.  To enable obfuscation, add the following line to openvpn.conf, adding a password.
+
+      ```
+      scramble obfuscate xxxxxxxxxx
+      ```
