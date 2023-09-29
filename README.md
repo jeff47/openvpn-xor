@@ -29,7 +29,7 @@ with the [XOR obfuscation patches](https://www.tunnelblick.net/cOpenvpn_xorpatch
       ```
       % docker compose run --rm openvpnd ovpn_getclient CLIENTNAME > CLIENTNAME.ovpn
       ```
-7.  To enable obfuscation, add the following line to openvpn.conf, adding a password.
+7.  To enable obfuscation, add the following line to openvpn.conf and to the client.ovpn file.  xxxxx is the password.
 
       ```
       scramble obfuscate xxxxxxxxxx
