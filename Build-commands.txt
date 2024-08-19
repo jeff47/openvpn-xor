@@ -1,0 +1,15 @@
+
+1.) Update Tunnelblick
+  git submodule update --remote Tunnelblick
+
+2.) Build
+  docker build . -t local/openvpn-xor
+
+3.) Push repo
+  git commit -m "Commit message"
+  git push
+
+4.) Tag/push images
+  docker tag local/openvpn-xor ghcr.io/jeff47/openvpn-xor:latest  
+  docker push ghcr.io/jeff47/openxpn-xor:latest
+
