@@ -1,7 +1,7 @@
 # Uses scripts from kylemanna/docker-openvpn
 
 # Update this to point to the current version of openvpn (must be in the Tunnelblick repo)
-ARG openvpn_version=openvpn-2.6.12
+ARG openvpn_version=openvpn-2.6.13
 
 # Smallest base image, using alpine with glibc
 FROM frolvlad/alpine-glibc:latest AS build
