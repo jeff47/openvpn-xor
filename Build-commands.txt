@@ -11,5 +11,4 @@
 
 4.) Tag/push images
   docker tag local/openvpn-xor ghcr.io/jeff47/openvpn-xor:latest  
-  docker push ghcr.io/jeff47/openxpn-xor:latest
-
+  docker push ghcr.io/jeff47/openvpn-xor:latest
